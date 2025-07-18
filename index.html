@@ -1,0 +1,454 @@
+x'<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Avaliação Prática - Shell Script</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="2" fill="rgba(255,255,255,0.1)"/></svg>') repeat;
+            animation: float 20s infinite linear;
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            100% { transform: translateY(-100px); }
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .subtitle {
+            font-size: 1.2em;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .company-info {
+            background: #f8f9fa;
+            padding: 30px;
+            border-left: 5px solid #3498db;
+            margin: 0;
+        }
+        
+        .company-info h2 {
+            color: #2c3e50;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .content {
+            padding: 40px;
+        }
+        
+        .question {
+            background: #ffffff;
+            border: 1px solid #e0e0e0;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .question:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        
+        .question-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #ecf0f1;
+        }
+        
+        .question-number {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2em;
+            box-shadow: 0 4px 10px rgba(52, 152, 219, 0.3);
+        }
+        
+        .question-title {
+            color: #2c3e50;
+            font-size: 1.4em;
+            font-weight: 600;
+        }
+        
+        .scenario {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 4px solid #f39c12;
+        }
+        
+        .scenario h4 {
+            color: #d35400;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .requirements {
+            background: #e8f6f3;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 4px solid #16a085;
+        }
+        
+        .requirements h4 {
+            color: #0f6674;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .requirements ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .requirements li {
+            padding: 8px 0;
+            padding-left: 25px;
+            position: relative;
+        }
+        
+        .requirements li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: #16a085;
+            font-weight: bold;
+        }
+        
+        .code-block {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 20px;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            margin: 15px 0;
+            position: relative;
+            overflow-x: auto;
+        }
+        
+        .code-block::before {
+            content: '💻';
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 1.2em;
+        }
+        
+        .tips {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .tips h4 {
+            color: #d68910;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .example-section {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 4px solid #6c757d;
+        }
+        
+        .example-section h4 {
+            color: #495057;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .footer {
+            background: #34495e;
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .evaluation-criteria {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .criteria-item {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .highlight {
+            background: linear-gradient(120deg, #a8edea 0%, #fed6e3 100%);
+            padding: 3px 8px;
+            border-radius: 5px;
+            font-weight: 600;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                border-radius: 15px;
+            }
+            
+            .header {
+                padding: 20px;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+            
+            .question {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🖥️ Avaliação Prática de Shell Script</h1>
+            <div class="subtitle">Administração de Sistemas Linux</div>
+        </div>
+        
+        <div class="footer">
+            
+            
+            <div style="background: rgba(255,255,255,0.1); padding: 20px; border-radius: 10px; margin-top: 25px;">
+                <h4>🏆 Distribuição de Pontos</h4>
+                <div style="display: flex; justify-content: center; gap: 30px; margin-top: 15px; flex-wrap: wrap;">
+                    <div style="text-align: center;">
+                        <div style="background: #4caf50; padding: 10px 20px; border-radius: 8px; margin-bottom: 5px;">
+                            <strong>Questão 1</strong><br>20 pontos
+                        </div>
+                        <small>Diagnóstico de Hardware</small>
+                    </div>
+                    <div style="text-align: center;">
+                        <div style="background: #ff9800; padding: 10px 20px; border-radius: 8px; margin-bottom: 5px;">
+                            <strong>Questão 2</strong><br>30 pontos
+                        </div>
+                        <small>Verificação de Disco</small>
+                    </div>
+                    <div style="text-align: center;">
+                        <div style="background: #2196f3; padding: 10px 20px; border-radius: 8px; margin-bottom: 5px;">
+                            <strong>Total</strong><br>50 pontos
+                        </div>
+                        <small>Nota Final</small>
+                    </div>
+                </div>
+            </div>
+            
+            <p style="margin-top: 20px;"><strong>Boa sorte! 🚀</strong></p>
+        </div>
+        
+        <div class="company-info">
+            <h2>🏢 Contexto Profissional</h2>
+            <p><strong>Empresa:</strong> TechSolutions Ltda. | <strong>Departamento:</strong> Infraestrutura e DevOps</p>
+            <p><strong>Posição:</strong> Administrador de Sistemas Linux | <strong>Tempo:</strong> 120 minutos</p>
+            <p><strong>Objetivo:</strong> Avaliar competências em automação e monitoramento de sistemas através de Shell Scripts</p>
+            <div style="background: #e3f2fd; padding: 15px; border-radius: 8px; margin-top: 15px; border-left: 4px solid #2196f3;">
+                <strong>📊 Pontuação Total: 50 pontos</strong> | Questão 1: 20 pts | Questão 2: 30 pts
+            </div>
+        </div>
+        
+        <div class="content">
+            <!-- Questão 1 -->
+            <div class="question">
+                <div class="question-header">
+                    <div class="question-number">01</div>
+                    <div class="question-title">Diagnóstico de Hardware com Script</div>
+                    <div class="points-badge" style="background: linear-gradient(135deg, #4caf50, #45a049); color: white; padding: 8px 15px; border-radius: 20px; font-weight: bold; margin-left: auto;">20 pts</div>
+                </div>
+                
+                <div class="scenario">
+                    <h4>🎯 Cenário Profissional</h4>
+                    <p>Você foi contratado para criar um script que auxilie na <span class="highlight">coleta de informações básicas do sistema</span>, voltadas para análise de hardware em servidores da empresa.</p>
+                </div>
+                
+                <div class="requirements">
+                    <h4>📋 Requisitos do Script</h4>
+                    <p><strong>Nome do arquivo:</strong> <code>diagnostico_hw.sh</code></p>
+                    <ul>
+                        <li>Mostre o nome do processador</li>
+                        <li>Mostre a quantidade total de memória RAM</li>
+                        <li>Mostre a arquitetura do sistema</li>
+                        <li>Apresente as informações de forma organizada e clara</li>
+                    </ul>
+                </div>
+                
+                <div class="tips">
+                    <h4>💡 Dicas Técnicas</h4>
+                    <p>Comandos úteis: <code>lscpu</code>, <code>free -h</code>, <code>uname -m</code></p>
+                    <p>Use <code>grep</code> para filtrar informações específicas dos comandos acima.</p>
+                </div>
+                
+                <div class="example-section">
+                    <h4>📄 Exemplo de Saída Esperada</h4>
+                    <div class="code-block">
+=== DIAGNÓSTICO DE HARDWARE === <br>
+Processador: Intel(R) Core(TM) i7-8550U CPU @ 1.80GHz <br>
+Memória RAM Total: 16Gi <br>
+Arquitetura: x86_64 <br>
+============================
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Questão 2 -->
+            <div class="question">
+                <div class="question-header">
+                    <div class="question-number">02</div>
+                    <div class="question-title">Verificação de Espaço em Disco</div>
+                    <div class="points-badge" style="background: linear-gradient(135deg, #ff9800, #f57c00); color: white; padding: 8px 15px; border-radius: 20px; font-weight: bold; margin-left: auto;">30 pts</div>
+                </div>
+                
+                <div class="scenario">
+                    <h4>🎯 Cenário Profissional</h4>
+                    <p>Você foi solicitado a criar um script para <span class="highlight">administração preventiva de sistemas Linux</span>, monitorando o espaço em disco da partição raiz (/) para evitar problemas críticos nos servidores.</p>
+                </div>
+                
+                <div class="requirements">
+                    <h4>📋 Requisitos do Script</h4>
+                    <p><strong>Nome do arquivo:</strong> <code>verifica_disco.sh</code></p>
+                    <ul>
+                        <li>Use o comando <code>df</code> para obter informações de uso do disco</li>
+                        <li>Utilize <code>grep</code>, <code>awk</code> e <code>sed</code> para filtrar e tratar a porcentagem de uso da partição /</li>
+                        <li>Verifique se o uso do disco está acima de 90%</li>
+                        <li>Exiba mensagem apropriada conforme o resultado</li>
+                    </ul>
+                </div>
+                
+                <div class="tips">
+                    <h4>💡 Comandos Úteis</h4>
+                    <p><code>df</code>, <code>grep</code>, <code>awk</code>, <code>sed</code>, <code>if</code>, <code>echo</code></p>
+                </div>
+                
+                <div class="example-section">
+                    <h4>🧪 Exemplo Prático com sed</h4>
+                    <p><strong>Removendo o caractere % para comparação numérica:</strong></p>
+                    <div class="code-block">
+echo "91%" | sed 's/%//'
+# Saída: 91
+                    </div>
+                    <p>✅ O comando remove o caractere <strong>%</strong>, útil para comparar números em condicionais.</p>
+                </div>
+                
+                <div class="example-section">
+                    <h4>📄 Saídas Esperadas</h4>
+                    <div class="code-block">
+# Se uso > 50%:<br>
+Atenção: ultrapassado 50% da capacidade do disco /<br>
+
+# Se uso ≤ 50%:<br>
+Utilizado menos da metade do disco.
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <h3>📊 Critérios de Avaliação</h3>
+            <div class="evaluation-criteria">
+                <div class="criteria-item">
+                    <strong>🎯 Funcionalidade</strong><br>
+                    Script executa corretamente
+                </div>
+                <div class="criteria-item">
+                    <strong>📝 Sintaxe</strong><br>
+                    Código limpo e estruturado
+                </div>
+                <div class="criteria-item">
+                    <strong>🔧 Comandos</strong><br>
+                    Uso correto das ferramentas
+                </div>
+                <div class="criteria-item">
+                    <strong>💬 Saída</strong><br>
+                    Informações claras e organizadas
+                </div>
+            </div>
+            <p style="margin-top: 20px;"><strong>Boa sorte! 🚀</strong></p>
+        </div>
+    </div>
+</body>
+</html>
